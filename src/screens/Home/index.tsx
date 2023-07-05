@@ -19,11 +19,14 @@ export function Home() {
     const onChangeName = (name: string) => {
         setName(name);
     }
-    function handleParticipantRemove(name: string) {
-        Alert.alert('Remove', `Deseja remover o participante ${name}?`, [
+    function handleParticipantRemove(nameValue: string) {
+        Alert.alert('Remove', `Deseja remover o participante ${nameValue}?`, [
             {
                 text: 'Sim',
-                onPress: () => Alert.alert('Desletado!')
+                onPress: () => {
+                    setParticipants(prevState => [...prevState.filter(item => item != nameValue)])
+                    Alert.alert('Desletado!')
+                }
             },
             {
                 text: 'Não'
