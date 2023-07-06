@@ -4,35 +4,35 @@ import { Participant } from "../../components/Participant";
 import { useState } from "react";
 
 export function Home() {
-    const [name, setName] = useState("")
-    const [participants, setParticipants] = useState<string[]>([])
+    const [participantName, setParticipantName] = useState("");
+    const [participants, setParticipants] = useState<string[]>([]);
+
     const handleParticipantAdd = () => {
-        if (participants.includes(name)) {
-            Alert.alert('Participante existe', 'Esse participante já existe, adicione um novo!');
+        if (participants.includes(participantName)) {
+            Alert.alert('Participante já existe', 'Adicione um novo participante!');
             return
         }
 
-        setParticipants(prevState => [...prevState, name]);
-        setName("");
+        setParticipants(prevState => [...prevState, participantName]);
+        setParticipantName('');
+    }
 
+    const handleChangeParticipantName = (name: string) => {
+        setParticipantName(name);
     }
-    const onChangeName = (name: string) => {
-        setName(name);
-    }
-    function handleParticipantRemove(nameValue: string) {
-        Alert.alert('Remove', `Deseja remover o participante ${nameValue}?`, [
+
+    function handleParticipantRemove(name: string) {
+        Alert.alert('Remove', `Deseja remover o participante ${name}?`, [
             {
                 text: 'Sim',
-                onPress: () => {
-                    setParticipants(prevState => [...prevState.filter(item => item != nameValue)])
-                    Alert.alert('Desletado!')
-                }
+                onPress: () => setParticipants(prevState => prevState.filter(item => item !== name))
             },
             {
                 text: 'Não'
             }
-        ])
+        ]);
     }
+
     return (
         <View style={styles.container}>
             <Text style={styles.eventName}>
@@ -46,8 +46,8 @@ export function Home() {
                     style={styles.input}
                     placeholder="Nome do participante"
                     placeholderTextColor="#6b6b6b"
-                    onChangeText={onChangeName}
-                    value={name}
+                    onChangeText={handleChangeParticipantName}
+                    value={participantName}
                 />
                 <TouchableOpacity style={styles.button} onPress={handleParticipantAdd}>
                     <Text style={styles.buttonText}>
@@ -71,16 +71,6 @@ export function Home() {
                     </Text>
                 )}
             />
-
-            {/* <ScrollView showsVerticalScrollIndicator={false}>
-                {participants.map(participant => (
-                    <Participant
-                        key={participant}
-                        name={participant}
-                        onRemove={() => handleParticipantRemove(participant)}
-                    />
-                ))}
-            </ScrollView> */}
         </View>
     )
 }
